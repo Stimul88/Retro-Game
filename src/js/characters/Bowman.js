@@ -8,6 +8,6 @@ export default class Bowman extends Character {
     this.defence = 25;
     this.type = 'bowman';
     this.attackDistance = 2;
-    this.stepDistance = 4;
+    this.stepDistance = 2;
   }
 }
