@@ -65,7 +65,6 @@ export default class GameController {
       new PositionedCharacter(team2.characters[1], this.randomPosition(3))
     ];
 
-    // this.positionedCharacterArray = positionedCharacterArray
     this.gamePlay.redrawPositions(this.positionedCharacterArray)
   }
 
@@ -139,10 +138,6 @@ export default class GameController {
     const attackCell = [];
     const indexRow = Math.floor(index / this.gamePlay.boardSize);
     const indexColumn = index % this.gamePlay.boardSize;
-    // console.log(indexColumn)
-    // console.log(indexRow)
-    // console.log(index)
-    // console.log(distance)
 
     for (let i = 1; i <= distance; i += 1) {
       if (indexColumn + i < this.gamePlay.boardSize) {
@@ -175,8 +170,6 @@ export default class GameController {
 
 
   levelUp (character) {
-    // this.gamePlay.drawUi(themes.prairie)
-
     if (character.health <= 0) {
       throw new Error('it is impossible to raise the level of the deceased')
     }
@@ -201,7 +194,6 @@ export default class GameController {
 
     const damage = this.calculationDamage(computerCharacter, this.selectedCharacter);
 
-    // if(position[index].className.includes('selected-red')) {
       if(this.roundAttackDistance(index, computerCharacter.attackDistance).includes(this.selectedIndex)) {
         await this.gamePlay.showDamage(this.selectedIndex, damage)
         let pos = this.positionedCharacterArray.find(item => item.character.type === this.selectedCharacter.type)
@@ -221,8 +213,6 @@ export default class GameController {
         this.computerMove(index)
         this.gamePlay.redrawPositions(this.positionedCharacterArray)
       }
-    // }
-    // this.gamePlay.redrawPositions(this.positionedCharacterArray)
   }
 
 
@@ -230,23 +220,11 @@ export default class GameController {
     const position = document.querySelectorAll('.cell');
     let character =  position[index].querySelector('.character');
 
-    const computerCharacter = this.computerTypesGeneration.find( i =>
-      i.type === character.classList[1]
-    );
 
     const pos = this.positionedCharacterArray.find(item => item.position === index)
-    // position.forEach((item1, selectedIndex) => {
-    //   if(item1.className.includes('selected-red')) {
-    //     this.gamePlay.deselectCell(selectedIndex)
-    //   }
-    // })
-    // console.log(pos)
     pos.position = index - 1
-    // this.selectedIndex = index
     this.gamePlay.redrawPositions(this.positionedCharacterArray)
     this.gamePlay.deselectCell(index)
-
-
   }
 
   calculationDamage(attacker, target) {
@@ -254,7 +232,6 @@ export default class GameController {
   }
 
   // выделение персонажа
-
   async onCellClick(index) {
     const position = Array.from(document.querySelectorAll('.cell'));
     const character = position[index].querySelector('.character');
@@ -283,9 +260,7 @@ export default class GameController {
     }
 
     // манипуляции с выделенным персонажем
-
     if(this.selected) {
-
       // первый выбор персонажа
       if(position.find(item => item.className.includes('selected-green'))) {
         let pos = this.positionedCharacterArray.find(item => item.position === this.selectedIndex)
@@ -346,6 +321,7 @@ export default class GameController {
             pos.character.health -= damage
             this.computerIndex = index;
 
+            // Проигрыш противника
             if (pos.character.health <= 0) {
               this.positionedCharacterArray.splice(indexComputerInArray, 1)
               this.gamePlay.setCursor(cursors.auto)
@@ -356,27 +332,12 @@ export default class GameController {
               this.gamePlay.redrawPositions(this.positionedCharacterArray)
             }
 
-
+            // Проигрыш команды противника
             if(this.computerTypesGeneration.length === 0) {
-
               this.playerTypesGeneration.forEach(item => {
                 this.levelUp (item)
               })
-
-
               this.gamePlay.drawUi(Themes.selectThemes(this.playerTypesGeneration[0].level))
-
-              // console.log(this.playerTypesGeneration[0].level)
-
-
-              // const positionedCharacterArray = [
-              //   new PositionedCharacter(team1.characters[0], this.randomPosition(0)),
-              //   new PositionedCharacter(team1.characters[1], this.randomPosition(1)),
-              //   new PositionedCharacter(team2.characters[0], this.randomPosition(2)),
-              //   new PositionedCharacter(team2.characters[1], this.randomPosition(3))
-              // ];
-
-              // this.positionedCharacterArray = positionedCharacterArray
               this.gamePlay.redrawPositions(this.positionedCharacterArray)
             }
 
@@ -419,7 +380,6 @@ export default class GameController {
       await position.forEach((item) => {
         if(item.className.includes('selected-yellow')) {
           if(!this.roundStepDistance(index, this.selectedCharacter.stepDistance).includes(this.selectedIndex)){
-            // console.log(this.roundStepDistance(index, this.selectedCharacter.stepDistance))
             this.gamePlay.setCursor(cursors.notallowed)
           } else {
             this.gamePlay.selectCell(index, 'green')
